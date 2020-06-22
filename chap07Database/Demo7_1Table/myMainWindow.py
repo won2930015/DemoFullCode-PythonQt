@@ -80,7 +80,7 @@ class QmyMainWindow(QMainWindow):
 ##创建界面组件与数据模型的字段之间的数据映射
       self.mapper= QDataWidgetMapper()
       self.mapper.setModel(self.tabModel) #设置数据模型
-      self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)  # 1.提交策略，2.自动提交
+      self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)  # 1.提交策略，2.自动提交.
     
 ##界面组件与tabModel的具体字段之间的联系
       self.mapper.addMapping(self.ui.dbSpinEmpNo, self.fldNum["empNo"])
