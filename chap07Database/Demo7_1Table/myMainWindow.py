@@ -28,13 +28,13 @@ class QmyMainWindow(QMainWindow):
       self.ui.tableView.setSelectionMode(QAbstractItemView.SingleSelection)  # 1.选择模式，2.单选
       self.ui.tableView.setAlternatingRowColors(True)  # 交替行颜色==True
       self.ui.tableView.verticalHeader().setDefaultSectionSize(22)  # 1.垂直标题，2.默认截面尺寸
-      self.ui.tableView.horizontalHeader().setDefaultSectionSize(60) # 1.水平标题，2.默认截面尺寸
+      self.ui.tableView.horizontalHeader().setDefaultSectionSize(60)  # 1.水平标题，2.默认截面尺寸
 
 
 ##  ==============自定义功能函数============
-   def __getFieldNames(self):  ##获取所有字段名称
-      emptyRec=self.tabModel.record()     #获取空记录，只有字段名
-      self.fldNum={}   #字段名与序号的字典
+   def __getFieldNames(self):  # 获取所有字段名称
+      emptyRec=self.tabModel.record()     # 获取空记录，只有字段名
+      self.fldNum={}   # 字段名与序号的字典
       for i in range(emptyRec.count()):
          fieldName=emptyRec.fieldName(i)
          self.ui.comboFields.addItem(fieldName)
@@ -42,12 +42,12 @@ class QmyMainWindow(QMainWindow):
          self.fldNum[fieldName]=i
       print (self.fldNum)
    
-   def __openTable(self): ##打开数据表
-      self.tabModel=QSqlTableModel(self,self.DB)   #数据模型
+   def __openTable(self):  # 打开数据表
+      self.tabModel=QSqlTableModel(self,self.DB)  # 数据模型
       self.tabModel.setTable("employee")  #设置数据表
-      self.tabModel.setEditStrategy(QSqlTableModel.OnManualSubmit)   #编辑策略（数据保存方式）：OnManualSubmit（手动提交） , OnRowChange（行改变）
-      self.tabModel.setSort(self.tabModel.fieldIndex("empNo"),Qt.AscendingOrder)  # 升序排序
-      if (self.tabModel.select() == False):  #查询数据失败
+      self.tabModel.setEditStrategy(QSqlTableModel.OnManualSubmit)   # 编辑策略（数据保存方式）：OnManualSubmit（手动提交） , OnRowChange（行改变）
+      self.tabModel.setSort(self.tabModel.fieldIndex("empNo"), Qt.AscendingOrder)  # 升序排序
+      if (self.tabModel.select() == False):  # 查询数据失败
          QMessageBox.critical(self, "错误信息",
               "打开数据表错误,错误信息\n"+self.tabModel.lastError().text())
          return
@@ -94,40 +94,40 @@ class QmyMainWindow(QMainWindow):
       self.mapper.toFirst()   #移动到首记录
       
       self.selModel=QItemSelectionModel(self.tabModel)   # 项选择模型
-      self.selModel.currentChanged.connect(self.do_currentChanged)         #当前项变化时触发
-      self.selModel.currentRowChanged.connect(self.do_currentRowChanged)   #选择行变化时触发
+      self.selModel.currentChanged.connect(self.do_currentChanged)         # 当前项变化时触发
+      self.selModel.currentRowChanged.connect(self.do_currentRowChanged)   # 选择行变化时触发
 
-      self.ui.tableView.setModel(self.tabModel)    #设置数据模型
-      self.ui.tableView.setSelectionModel(self.selModel)    #设置选择模型
+      self.ui.tableView.setModel(self.tabModel)    # 设置数据模型
+      self.ui.tableView.setSelectionModel(self.selModel)    # 设置选择模型
       
-      self.ui.tableView.setColumnHidden(self.fldNum["Memo"],   True)  #隐藏列
-      self.ui.tableView.setColumnHidden(self.fldNum["Photo"],  True)  #隐藏列
+      self.ui.tableView.setColumnHidden(self.fldNum["Memo"],   True)  # 隐藏列
+      self.ui.tableView.setColumnHidden(self.fldNum["Photo"],  True)  # 隐藏列
 
 ##tableView上为“性别”和“部门”两个字段设置自定义代理组件
       strList=("男","女")
-      self.__delegateSex=QmyComboBoxDelegate()
-      self.__delegateSex.setItems(strList,False)
-      self.ui.tableView.setItemDelegateForColumn(self.fldNum["Gender"],self.__delegateSex)   #Combbox选择型
+      self.__delegateSex = QmyComboBoxDelegate()
+      self.__delegateSex.setItems(strList, False)  # 设置不可编辑
+      self.ui.tableView.setItemDelegateForColumn(self.fldNum["Gender"], self.__delegateSex)   # Combbox选择型 , self.__delegateSex对象委托到列
 
       strList=("销售部","技术部","生产部","行政部")
       self.__delegateDepart=QmyComboBoxDelegate()
-      self.__delegateDepart.setItems(strList,True)
-      self.ui.tableView.setItemDelegateForColumn(self.fldNum["Department"],self.__delegateDepart)
+      self.__delegateDepart.setItems(strList, True)  # 设置可编辑
+      self.ui.tableView.setItemDelegateForColumn(self.fldNum["Department"],self.__delegateDepart)  # self.__delegateDepart对象委托到列.
 
 
 ##更新actions和界面组件的使能状态
       self.ui.actOpenDB.setEnabled(False)  # 打开数据库
 
-      self.ui.actRecAppend.setEnabled(True) # 加入记录
-      self.ui.actRecInsert.setEnabled(True) # 插入记录
-      self.ui.actRecDelete.setEnabled(True) # 删除记录
+      self.ui.actRecAppend.setEnabled(True)  # 加入记录
+      self.ui.actRecInsert.setEnabled(True)  # 插入记录
+      self.ui.actRecDelete.setEnabled(True)  # 删除记录
       self.ui.actScan.setEnabled(True)  # 扫描（涨工资）
 
       self.ui.groupBoxSort.setEnabled(True)  # 排序
-      self.ui.groupBoxFilter.setEnabled(True) # 过滤
+      self.ui.groupBoxFilter.setEnabled(True)  # 过滤
         
 ##  ==========由connectSlotsByName() 自动连接的槽函数==================        
-   @pyqtSlot()    ##选择数据库，打开数据表
+   @pyqtSlot()    # 选择数据库，打开数据表
    def on_actOpenDB_triggered(self):
       dbFilename,flt=QFileDialog.getOpenFileName(self,"选择数据库文件","",
                              "SQL Lite数据库(*.db *.db3)")
@@ -145,8 +145,8 @@ class QmyMainWindow(QMainWindow):
       else:         
          QMessageBox.warning(self, "错误", "打开数据库失败")
 
-   @pyqtSlot()    ##保存修改
-   def on_actSubmit_triggered(self):   
+   @pyqtSlot()    # 保存修改
+   def on_actSubmit_triggered(self):
       res=self.tabModel.submitAll()
       if (res==False):
          QMessageBox.information(self, "消息",
@@ -155,154 +155,152 @@ class QmyMainWindow(QMainWindow):
          self.ui.actSubmit.setEnabled(False)
          self.ui.actRevert.setEnabled(False)
 
-   @pyqtSlot()    ##取消修改
+   @pyqtSlot()    # 取消修改
    def on_actRevert_triggered(self): 
       self.tabModel.revertAll()
       self.ui.actSubmit.setEnabled(False)
       self.ui.actRevert.setEnabled(False)
 
-   @pyqtSlot()    ##添加记录
+   @pyqtSlot()    # 添加记录
    def on_actRecAppend_triggered(self):
-      self.tabModel.insertRow(self.tabModel.rowCount(),QModelIndex())   #在末尾添加一个记录
+      self.tabModel.insertRow(self.tabModel.rowCount(), QModelIndex())   # 在末尾添加一个记录
 
-      curIndex=self.tabModel.index(self.tabModel.rowCount()-1,1)        #创建最后一行的ModelIndex
-      self.selModel.clearSelection()  #清空选择项
-      self.selModel.setCurrentIndex(curIndex,QItemSelectionModel.Select)  #设置刚插入的行为当前选择行
+      curIndex = self.tabModel.index(self.tabModel.rowCount()-1, 1)        # 创建最后一行的ModelIndex, 选择最后一行,的第1列
+      self.selModel.clearSelection()  # 清空选择项
+      self.selModel.setCurrentIndex(curIndex, QItemSelectionModel.Select)  # 设置刚插入的行为当前选择行
 
-      currow=curIndex.row()   #获得当前行
-      self.tabModel.setData(self.tabModel.index(currow,self.fldNum["empNo"]),
-                            2000+self.tabModel.rowCount())  #自动生成编号
-      self.tabModel.setData(self.tabModel.index(currow,self.fldNum["Gender"]),"男")
+      currow = curIndex.row()   # 获得当前行
+      self.tabModel.setData(self.tabModel.index(currow, self.fldNum["empNo"]),  # tabModel.index(row, col)
+                            2000+self.tabModel.rowCount())  # 自动生成编号
+      self.tabModel.setData(self.tabModel.index(currow,self.fldNum["Gender"]), "男")
 
-   @pyqtSlot()    ##插入记录
+   @pyqtSlot()    # 插入记录
    def on_actRecInsert_triggered(self):
-      curIndex=self.ui.tableView.currentIndex()   #QModelIndex
-      self.tabModel.insertRow(curIndex.row(),QModelIndex())
-      self.selModel.clearSelection()      #清除已有选择
-      self.selModel.setCurrentIndex(curIndex,QItemSelectionModel.Select)
+      curIndex = self.ui.tableView.currentIndex()   # QModelIndex
+      self.tabModel.insertRow(curIndex.row(), QModelIndex())
+      self.selModel.clearSelection()      # 清除已有选择
+      self.selModel.setCurrentIndex(curIndex, QItemSelectionModel.Select)
 
-   @pyqtSlot()    ##删除记录
+   @pyqtSlot()    # 删除记录
    def on_actRecDelete_triggered(self):
-      curIndex=self.selModel.currentIndex()     #获取当前选择单元格的模型索引
-      self.tabModel.removeRow(curIndex.row())   #删除当前行
+      curIndex = self.selModel.currentIndex()     # 获取当前选择单元格的模型索引
+      self.tabModel.removeRow(curIndex.row())   # 删除当前行
 
-   @pyqtSlot()    ##清除照片
+   @pyqtSlot()    # 清除照片
    def on_actPhotoClear_triggered(self):
-      curRecNo=self.selModel.currentIndex().row()
-      curRec=self.tabModel.record(curRecNo)  #获取当前记录,QSqlRecord
-      curRec.setNull("Photo")    #设置为空值
+      curRecNo = self.selModel.currentIndex().row()
+      curRec = self.tabModel.record(curRecNo)  # 获取当前记录,QSqlRecord
+      curRec.setNull("Photo")    # 设置为空值
       self.tabModel.setRecord(curRecNo,curRec)
-      self.ui.dbLabPhoto.clear() #清除界面上的图片显示
+      self.ui.dbLabPhoto.clear()  # 清除界面上的图片显示
 
-   @pyqtSlot()    ##设置照片
+   @pyqtSlot()    # 设置照片
    def on_actPhoto_triggered(self):
-      fileName,filt=QFileDialog.getOpenFileName(self,"选择图片文件","","照片(*.jpg)")
-      if (fileName==''):
+      fileName, filt = QFileDialog.getOpenFileName(self,"选择图片文件","","照片(*.jpg)")
+      if (fileName == ''):
          return
       
-      file=QFile(fileName)    #fileName为图片文件名
+      file = QFile(fileName)    # fileName为图片文件名
       file.open(QIODevice.ReadOnly)
       try:
-         data = file.readAll()  #QByteArray
+         data = file.readAll()  # QByteArray
       finally:
          file.close()
 
-      curRecNo=self.selModel.currentIndex().row()
-      curRec=self.tabModel.record(curRecNo)     #获取当前记录QSqlRecord
-      curRec.setValue("Photo",data)    #设置字段数据
+      curRecNo = self.selModel.currentIndex().row()
+      curRec = self.tabModel.record(curRecNo)     # 获取当前记录QSqlRecord
+      curRec.setValue("Photo", data)    # 设置字段数据
       self.tabModel.setRecord(curRecNo,curRec)
 
-      pic=QPixmap()
+      pic = QPixmap()
       pic.loadFromData(data)  
-      W=self.ui.dbLabPhoto.width()
-      self.ui.dbLabPhoto.setPixmap(pic.scaledToWidth(W)) #在界面上显示
-      
+      W = self.ui.dbLabPhoto.width()
+      self.ui.dbLabPhoto.setPixmap(pic.scaledToWidth(W))  # 在界面上显示
 
-   @pyqtSlot()    ##涨工资，遍历数据表所有记录
+   @pyqtSlot()    # 涨工资，遍历数据表所有记录
    def on_actScan_triggered(self):
-      if (self.tabModel.rowCount()==0):
+      if (self.tabModel.rowCount() == 0):
         return
 
       for i in range(self.tabModel.rowCount()):
-         aRec=self.tabModel.record(i)     #获取当前记录
+         aRec = self.tabModel.record(i)     # 获取当前记录
    ##         salary=aRec.value("Salary").toFloat()      #错误，无需再使用toFloat()函数
-         salary=aRec.value("Salary")
-         salary=salary*1.1
-         aRec.setValue("Salary",salary)
-         self.tabModel.setRecord(i,aRec)
+         salary = aRec.value("Salary")
+         salary = salary*1.1
+         aRec.setValue("Salary", salary)
+         self.tabModel.setRecord(i, aRec)
 
 
       if (self.tabModel.submitAll()):
          QMessageBox.information(self, "消息", "涨工资计算完毕")
 
-
-   @pyqtSlot(int)    ##排序字段 _ 变化
-   def on_comboFields_currentIndexChanged(self,index):
+   @pyqtSlot(int)    # 排序字段 _ 变化
+   def on_comboFields_currentIndexChanged(self, index):
       if self.ui.radioBtnAscend.isChecked():
-         self.tabModel.setSort(index,Qt.AscendingOrder)
+         self.tabModel.setSort(index, Qt.AscendingOrder)  # setSort(列号, 排序方法)
       else:
-         self.tabModel.setSort(index,Qt.DescendingOrder)
+         self.tabModel.setSort(index, Qt.DescendingOrder)
       self.tabModel.select()
 
-   @pyqtSlot()    ##升序
+   @pyqtSlot()    # 升序
    def on_radioBtnAscend_clicked(self):
       self.tabModel.setSort(self.ui.comboFields.currentIndex(),Qt.AscendingOrder)
       self.tabModel.select()
       
-   @pyqtSlot()    ##降序
+   @pyqtSlot()    # 降序
    def on_radioBtnDescend_clicked(self):
       self.tabModel.setSort(self.ui.comboFields.currentIndex(),Qt.DescendingOrder)
       self.tabModel.select()
 
-   @pyqtSlot()    ##过滤，男
+   @pyqtSlot()    # 过滤，男
    def on_radioBtnMan_clicked(self):
       self.tabModel.setFilter("Gender='男'")
    ##      print(self.tabModel.filter())
    ##      self.tabModel.select()
       
-   @pyqtSlot()    ##数据过滤，女
+   @pyqtSlot()    # 数据过滤，女
    def on_radioBtnWoman_clicked(self):
       self.tabModel.setFilter("Gender='女' ")
    ##      print(self.tabModel.filter())
    ##      self.tabModel.select()
 
-   @pyqtSlot()    ##取消数据过滤
+   @pyqtSlot()    # 取消数据过滤
    def on_radioBtnBoth_clicked(self):
       self.tabModel.setFilter("")
    ##      print(self.tabModel.filter())
    ##      self.tabModel.select()
       
 ##  =============自定义槽函数===============================        
-   def do_currentChanged(self,current,previous):   ##更新actPost和actCancel 的状态
-      self.ui.actSubmit.setEnabled(self.tabModel.isDirty())    #有未保存修改时可用
+   def do_currentChanged(self, current, previous):   # 更新actPost和actCancel 的状态
+      self.ui.actSubmit.setEnabled(self.tabModel.isDirty())    # 有未保存修改时可用
       self.ui.actRevert.setEnabled(self.tabModel.isDirty())
 
-   def do_currentRowChanged(self, current, previous): #行切换时的状态控制
+   def do_currentRowChanged(self, current, previous):  # 行切换时的状态控制
       self.ui.actRecDelete.setEnabled(current.isValid())  # isValid:如果有效
       self.ui.actPhoto.setEnabled(current.isValid())
       self.ui.actPhotoClear.setEnabled(current.isValid())
 
-      if (current.isValid() ==False):
-         self.ui.dbLabPhoto.clear()    #清除图片显示
+      if (current.isValid() == False):
+         self.ui.dbLabPhoto.clear()    # 清除图片显示
          return
 
-      self.mapper.setCurrentIndex(current.row())  #更新数据映射的行号
-      curRec=self.tabModel.record(current.row())  #获取当前记录,QSqlRecord类型
+      self.mapper.setCurrentIndex(current.row())  # 更新数据映射的行号
+      curRec = self.tabModel.record(current.row())  # 获取当前记录,QSqlRecord类型
 
-      if (curRec.isNull("Photo")): #图片字段内容为空
+      if (curRec.isNull("Photo")):  # 图片字段内容为空
          self.ui.dbLabPhoto.clear()
       else:
-##         data=bytearray(curRec.value("Photo"))   #可以工作
+##         data=bytearray(curRec.value("Photo"))   # 可以工作
          data=curRec.value("Photo")   # 也可以工作
-         pic=QPixmap()
+         pic = QPixmap()
          pic.loadFromData(data)
-         W=self.ui.dbLabPhoto.size().width()
+         W = self.ui.dbLabPhoto.size().width()
          self.ui.dbLabPhoto.setPixmap(pic.scaledToWidth(W))
 
    
 ##  ============窗体测试程序 ================================
-if  __name__ == "__main__":        #用于当前窗体测试
-   app = QApplication(sys.argv)    #创建GUI应用程序
-   form=QmyMainWindow()            #创建窗体
+if  __name__ == "__main__":        # 用于当前窗体测试
+   app = QApplication(sys.argv)    # 创建GUI应用程序
+   form=QmyMainWindow()            # 创建窗体
    form.show()
    sys.exit(app.exec_())

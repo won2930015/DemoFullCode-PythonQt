@@ -1,12 +1,14 @@
-from PyQt5.QtWidgets import  QStyledItemDelegate,QDoubleSpinBox,QComboBox
+from PyQt5.QtWidgets import QStyledItemDelegate, QDoubleSpinBox, QComboBox
 
-from PyQt5.QtCore import  Qt
+from PyQt5.QtCore import Qt
 
-##from PyQt5.QtWidgets import  QLabel, QAbstractItemView, QFileDialog
+ # from PyQt5.QtWidgets import  QLabel, QAbstractItemView, QFileDialog
 
-##from PyQt5.QtGui import QStandardItemModel, QStandardItem
+ # from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 ## ==============基于QDoubleSpinbox的代理组件====================
+
+
 class QmyFloatSpinDelegate(QStyledItemDelegate):
    def __init__(self, minV=0,maxV=10000,digi=2,parent=None):
       super().__init__(parent) 
@@ -23,8 +25,8 @@ class QmyFloatSpinDelegate(QStyledItemDelegate):
       return editor
 
    def setEditorData(self,editor,index):
-      model=index.model()  #关联的数据模型
-      text=model.data(index, Qt.EditRole)  #单元格文字
+      model = index.model()  #关联的数据模型
+      text = model.data(index, Qt.EditRole)  #单元格文字
 ##      value = float(index.model().data(index, Qt.EditRole))
       editor.setValue(float(text))
         
